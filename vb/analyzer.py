@@ -151,6 +151,9 @@ class PELoader(MemoryInterface):
     def rva(self, va):
         return va - self.base
 
+    def va_from_file_off(self, file_off):
+        rva = file_off - self.text.PointerToRawData + self.text.VirtualAddress
+        return rva + self.base
 
 class ShellcodeLoader(MemoryInterface):
     def __init__(self, buf):
