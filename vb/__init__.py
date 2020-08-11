@@ -282,6 +282,20 @@ class ObjectInfo(vstruct.VStruct):
         self.lpConstants = v_uint32()      # 0x34 lpConstants Pointer to Constants Pool.
 
 
+class ProcDscInfo(vstruct.VStruct):
+    def __init__(self):
+        vstruct.VStruct.__init__(self)
+        self.lpProcTable = v_uint32()
+        self.wfield_4   = v_uint16()
+        self.wFrameSize = v_uint16()
+        self.wProcSize  = v_uint16()
+
+
+class MethodInfo():
+    def __init__(self, addr, p_d_i):
+        self.addr = addr
+        self.size = p_d_i.wProcSize
+
 class OptionalObjectInfo(vstruct.VStruct):
     def __init__(self):
         vstruct.VStruct.__init__(self)
