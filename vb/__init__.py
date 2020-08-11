@@ -1153,7 +1153,7 @@ class VBAnalyzer:
         if project_data2.lpObjectList == 0x0:
             raise RuntimeError('no public object table')
 
-        for i in range(object_table.wCompiledObjects):
+        for i in range(object_table.wTotalObjects):
             va = object_table.lpObjectArray + (i * len(PublicObjectDescriptor()))
             yield self.read_struct(va, PublicObjectDescriptor)
 
