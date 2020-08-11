@@ -12,6 +12,7 @@ import logging
 import pefile
 import vstruct
 import capstone
+import struct
 from vstruct.primitives import *
 
 import vb.analyzer
@@ -1078,6 +1079,20 @@ class VBAnalyzer:
             assert vb.get_object_table(project_data).wCompiledObjects == 0x69
         '''
         return self.read_struct(project_data.lpObjectTable, ObjectTable)
+
+
+    def get_proc_desc_info(self, obj_info):
+
+        for i in range(obj_info.wMethodCount):
+            # Get the bytes of the first entry
+            off = obj_info.lpMethods + (i * 4)
+            data = self.ana.get_bytes(off, 0x4)
+            # Unpack address to little endian
+            addr = struct.unpack("<L", data)[0]
+            # Check if address is between valid bounds
+            if addr > 0x00400000 and addr < 0x00500000:
+                    p_d_i = self.read_struct(addr, ProcDscInfo)
+                    yield MethodInfo(addr, p_d_i)
 
     def get_project_data2(self, object_table):
         '''
